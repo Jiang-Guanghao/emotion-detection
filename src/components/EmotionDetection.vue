@@ -1,6 +1,6 @@
 <template>
     <div>
-        <video id="video" width="100%" height="50%" autoplay></video>
+        <video id="video" width="25%" height="10%" autoplay></video>
         <canvas id="canvas" width="600" height="480" style="display: none;"></canvas>
         <button v-on:click.native='process'>Analyze</button>
 
@@ -53,9 +53,7 @@ export default {
       this.loader = true
       context.drawImage(video, 0, 0, 640, 480)
       const base64 = canvas.toDataURL()
-      // console.log(base64)
       const finalImage = base64.replace('data:image/png;base64,', '')
-      // console.log(finalImage);
       this.data.requests[0].image.content = finalImage
       axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${this.apiKey}`,
         this.data).then(response => {
@@ -67,7 +65,6 @@ export default {
           vm.sorrow = result.sorrowLikelihood
           vm.surprised = result.surpriseLikelihood
           vm.confidence = this.confidenceInt(result.detectionConfidence)
-          vm.loader = false
           vm.result = true
         }).catch(error => {
           console.log(error)
